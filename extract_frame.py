@@ -293,6 +293,37 @@ def test_addTextOnImage():
     root_txt_list = '/home/zhanghao13/.jupyter/dataset/image_data_1w/image_data_hash2tag'
     addTextOnImage(root_txt_list)
 
+    
+# 抽取首帧
+def extract_a_key_frame(root_in, root_out, keys_frame=1):
+
+    # 直接提取 关键帧，给定关键帧的序号: keys_frame
+    # 但是我有个问题没搞清楚：keys_frame 到底是 整个视频中的 frame_id, 还是 关键帧序列 key_frame_lsit 中的 id ?
+    # 上面问题，check TODO
+
+    cnt = 0
+    for video in os.listdir(root_in):  # 列出每一个xxx.mp4
+        cur_video = os.path.join(root_in, video)
+        print("cur_video: ", cur_video)
+        filename, extension = os.path.splitext(video)
+        path_out_imgs = os.path.join(root_out, filename)
+        print("path_out_imgs: ", path_out_imgs)
+        if not os.path.exists(path_out_imgs):
+            os.makedirs(path_out_imgs)
+        cap = cv2.VideoCapture(cur_video)
+        cap.set(cv2.CAP_PROP_POS_FRAMES, keys_frame)  # keys_frame为关键帧的序号
+        save_name = 'key_frame_{}.jpg'.format(keys_frame)
+        save_path = os.path.join(path_out_imgs, save_name)
+        flag, frame = cap.read()  #  frame为关键帧图片，Mat类型。
+        if flag:
+            cv2.imwrite(save_path, frame)
+            print('image of %s is saved' % save_path)
+        #
+        # 路径写入 txt
+        path_out_imgs
+        with open(path_save_txt, "w") as fp:
+            pass    
+    
 if __name__ == '__main__':
     # test_refine_text()
     # test_sorted_ret_idx()
