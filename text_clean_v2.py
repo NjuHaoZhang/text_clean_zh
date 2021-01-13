@@ -54,3 +54,25 @@ def feature_extract(word, feat_cached_file):
                 fp.write("{} ".format(i))
                 
     return feature
+
+#
+class NovelMaterial(Material):
+    def __init__(self, novel_path, config):
+        self.data = read_novel_data(novel_path)
+        self.config = config
+        # self.text_preprocess()
+
+    def text_preprocess(self):
+        # embedding提取模型初始化, 空境视频也需要这个function，后面可以考虑继承于一个基类
+        self.novel_word_list = []
+        for id in self.data:
+            # 对小说简介进行分词
+            content = self.data[id]["content"]
+            content_split_word = split_text_to_word(content)
+
+            # 去除无意义的词，或者没必要用来进行匹配的词
+            content_split_word = remove_unnecessary_words(content_split_word)
+            self.data[id]["content_split_words"] = content_split_word
+            self.novel_word_list += content_split_word
+            
+        # self.word_embedding = get_text_embedding(self.novel_word_list, self.config.input_data["feature_cached_dir"])
