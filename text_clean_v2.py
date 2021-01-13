@@ -1,4 +1,5 @@
-
+import jieba
+import jieba.analyse
 
 #
 def split_text_to_word(text):
